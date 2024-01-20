@@ -8,8 +8,9 @@ class Card:
 
 
 class Player:
-    def __init__(self, cards: list):
+    def __init__(self, cards: list, num: int):
         self.cards = cards
+        self.num = num
 
     def return_card(self, dignity: str, suit: str):
         return self.cards[self.cards.index(Card(dignity, suit))]
@@ -20,14 +21,17 @@ class Durak:
         self.player1 = player1
         self.player2 = player2
         self.ai_flag = ai_flag
-        dignity = ['2', '3', '4', '5', '6', '7', '8', '9', 'J', 'Q', 'K', 'A', '']
+        self.winner = None
+        dignity = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
         # diamonds hearts spades clubs  бубны черви пики крести
         suits = ['diamonds', 'hearts', 'spades', 'clubs']
-        trump = choice(suits)  # заменить на рандом
+        trump = choice(suits)
         self.standard_deck = list()
         for dign in dignity:
             for suit in suits:
                 self.standard_deck.append(Card(dign, suit))
+        self.standard_deck.append(Card('Joker', 'Black'))
+        self.standard_deck.append(Card('Joker', 'Red'))
 
         deck1 = sample(self.standard_deck, k=6)
         self.give_cards(deck1, self.player1)
@@ -39,13 +43,23 @@ class Durak:
         self.init_game()
 
     def init_game(self):
-        player1 = self.player1
-        player2 = self.player2
+        [self.attacker, self.defender] = sample([self.player1, self.player2], k=2)
         end = True
         while True:
             if end:
                 break
-            pass
+
+            if len(self.standard_deck) == 0:  # Проверка окончания игры
+                if len(self.defender.cards) == 0:
+                    end = True
+                    self.winner = self.defender.num
+                    break
+                elif len(self.attacker.cards) == 0:
+                    end = True
+                    self.winner = self.attacker.num
+                    break
+
+            self.attacker, self.defender = self.defender, self.attacker
 
     def give_cards(self, cards: (list, str), player: Player):
         if type(cards) != type(list()):
@@ -57,9 +71,11 @@ class Durak:
         for card in deck:
             self.standard_deck.remove(card)
 
-    def players_turn(self):
-        return None
+    def who_attack(self):
+        return self.attacker.num
+
+    def who_defend(self):
+        return self.defender.num
 
 
-# diamonds hearts spades clubs  бубны черви пики крести
-Durak(Player([]), Player([]))
+Durak(Player([], 1), Player([], 2))
