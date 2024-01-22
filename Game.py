@@ -18,17 +18,19 @@ class Player:
 
 class Durak:
     def __init__(self, player1: Player, player2, ai_flag=False):
+        self.board = list()
         self.player1 = player1
         self.player2 = player2
+        [self.attacker, self.defender] = sample([self.player1, self.player2], k=2)
         self.ai_flag = ai_flag
         self.winner = None
-        dignity = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
+        self.dignitys = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
         # diamonds hearts spades clubs  бубны черви пики крести
-        suits = ['diamonds', 'hearts', 'spades', 'clubs']
-        trump = choice(suits)
+        self.suits = ['diamonds', 'hearts', 'spades', 'clubs']
+        self.trump = choice(self.suits)
         self.standard_deck = list()
-        for dign in dignity:
-            for suit in suits:
+        for dign in self.dignitys:
+            for suit in self.suits:
                 self.standard_deck.append(Card(dign, suit))
         self.standard_deck.append(Card('Joker', 'Black'))
         self.standard_deck.append(Card('Joker', 'Red'))
@@ -40,29 +42,39 @@ class Durak:
         self.give_cards(deck2, self.player2)
         self.remove_deck(deck2)
 
-        self.init_game()
+        # self.init_game()
 
     def init_game(self):
-        [self.attacker, self.defender] = sample([self.player1, self.player2], k=2)
-        end = True
-        while True:
-            if end:
-                break
-
-            if len(self.standard_deck) == 0:  # Проверка окончания игры
-                if len(self.defender.cards) == 0:
-                    end = True
-                    self.winner = self.defender.num
-                    break
-                elif len(self.attacker.cards) == 0:
-                    end = True
-                    self.winner = self.attacker.num
-                    break
+        end = False
+        if len(self.standard_deck) == 0:  # Проверка окончания игры
+            if len(self.defender.cards) == 0:
+                end = True
+                self.winner = self.defender.num
+            elif len(self.attacker.cards) == 0:
+                end = True
+                self.winner = self.attacker.num
 
             self.attacker, self.defender = self.defender, self.attacker
 
+    def make_attack(self, *cards):
+        for card in cards:
+            self.board.append([card, ])
+
+    def make_defend(self, *cards):
+        if len(self.board) == 0:
+            need_to_delete = list()
+            for i, card in enumerate(cards):
+                from_board = self.board[i]
+                if card.suit == self.trump and from_board.suit != self.trump:
+                    need_to_delete.append(from_board)
+                elif card.suit == from_board.suit:
+                    if self.dignitys.index(card.dignity) > self.dignitys.index(from_board.dignity):
+                        need_to_delete.append(card)
+                else:
+                    print('Не подходит')
+
     def give_cards(self, cards: (list, str), player: Player):
-        if type(cards) != type(list()):
+        if type(cards) is not list:
             cards = [cards]
         for card in cards:
             player.cards.append(card)
