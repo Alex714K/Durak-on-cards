@@ -1,19 +1,6 @@
 from random import choice, sample
-
-
-class Card:
-    def __init__(self, dignity: str, suit: str):
-        self.dignity = dignity
-        self.suit = suit
-
-
-class Player:
-    def __init__(self, cards: list, num: int):
-        self.cards = cards
-        self.num = num
-
-    def return_card(self, dignity: str, suit: str):
-        return self.cards[self.cards.index(Card(dignity, suit))]
+from Player import Player
+from Card import Card
 
 
 class Durak:
@@ -24,7 +11,8 @@ class Durak:
         [self.attacker, self.defender] = sample([self.player1, self.player2], k=2)
         self.ai_flag = ai_flag
         self.winner = None
-        self.dignitys = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
+        self.dignitys_str = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
+        self.dignitys = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
         # diamonds hearts spades clubs  бубны черви пики крести
         self.suits = ['diamonds', 'hearts', 'spades', 'clubs']
         self.trump = choice(self.suits)
@@ -42,9 +30,7 @@ class Durak:
         self.give_cards(deck2, self.player2)
         self.remove_deck(deck2)
 
-        # self.init_game()
-
-    def init_game(self):
+    def end_or_not(self):
         end = False
         if len(self.standard_deck) == 0:  # Проверка окончания игры
             if len(self.defender.cards) == 0:
@@ -68,12 +54,13 @@ class Durak:
                 if card.suit == self.trump and from_board.suit != self.trump:
                     need_to_delete.append(from_board)
                 elif card.suit == from_board.suit:
-                    if self.dignitys.index(card.dignity) > self.dignitys.index(from_board.dignity):
+                    if card.dignity > from_board.dignity:
                         need_to_delete.append(card)
                 else:
                     print('Не подходит')
 
-    def give_cards(self, cards: (list, str), player: Player):
+    @staticmethod
+    def give_cards(cards: (list, int), player: Player):
         if type(cards) is not list:
             cards = [cards]
         for card in cards:
@@ -90,4 +77,4 @@ class Durak:
         return self.defender.num
 
 
-Durak(Player([], 1), Player([], 2))
+print(Durak(Player([], 1), Player([], 2)))
