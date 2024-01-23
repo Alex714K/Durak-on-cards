@@ -40,8 +40,6 @@ class Durak:
                 end = True
                 self.winner = self.attacker.num
 
-            self.attacker, self.defender = self.defender, self.attacker
-
     def make_attack(self, *cards):
         for card in cards:
             self.board.append([card, ])
