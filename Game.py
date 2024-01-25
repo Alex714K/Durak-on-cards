@@ -1,78 +1,55 @@
-from random import choice, sample
+import pygame
+from Durak import Durak
 from Player import Player
-from Card import Card
+from Button import Button
+from Menu import menu
 
 
-class Durak:
-    def __init__(self, player1: Player, player2, ai_flag=False):
-        self.board = list()
-        self.player1 = player1
-        self.player2 = player2
-        [self.attacker, self.defender] = sample([self.player1, self.player2], k=2)
-        self.ai_flag = ai_flag
-        self.winner = None
-        self.dignitys_str = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
-        self.dignitys = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
-        # diamonds hearts spades clubs  бубны черви пики крести
-        self.suits = ['diamonds', 'hearts', 'spades', 'clubs']
-        self.trump = choice(self.suits)
-        self.standard_deck = list()
-        for dign in self.dignitys:
-            for suit in self.suits:
-                self.standard_deck.append(Card(dign, suit))
-        self.standard_deck.append(Card('Joker', 'Black'))
-        self.standard_deck.append(Card('Joker', 'Red'))
+def init():
+    pygame.init()
 
-        deck1 = sample(self.standard_deck, k=6)
-        self.give_cards(deck1, self.player1)
-        self.remove_deck(deck1)
-        deck2 = sample(self.standard_deck, k=6)
-        self.give_cards(deck2, self.player2)
-        self.remove_deck(deck2)
+    durak = Durak(Player([], 1), Player([], 2))
 
-    def end_or_not(self):
-        end = False
-        if len(self.standard_deck) == 0:  # Проверка окончания игры
-            if len(self.defender.cards) == 0:
-                end = True
-                self.winner = self.defender.num
-            elif len(self.attacker.cards) == 0:
-                end = True
-                self.winner = self.attacker.num
+    size = width, height = 1920, 1080
+    flag = pygame.FULLSCREEN
+    screen = pygame.display.set_mode(size, flag)
+    clock = pygame.time.Clock()
+    pygame.display.set_caption('Durak')
+    pygame.display.get_desktop_sizes()
 
-    def make_attack(self, *cards):
-        for card in cards:
-            self.board.append([card, ])
+    # Создаем второй холст
+    screen2 = pygame.Surface(screen.get_size())
+    running = True
 
-    def make_defend(self, *cards):
-        if len(self.board) == 0:
-            need_to_delete = list()
-            for i, card in enumerate(cards):
-                from_board = self.board[i]
-                if card.suit == self.trump and from_board.suit != self.trump:
-                    need_to_delete.append(from_board)
-                elif card.suit == from_board.suit:
-                    if card.dignity > from_board.dignity:
-                        need_to_delete.append(card)
-                else:
-                    print('Не подходит')
+    x = 100
+    y = 100
+    window = 'menu'
+    keys = pygame.key.get_pressed()
 
-    @staticmethod
-    def give_cards(cards: (list, int), player: Player):
-        if type(cards) is not list:
-            cards = [cards]
-        for card in cards:
-            player.cards.append(card)
+    but = Button((100, 100), (50, 100), (250, 250, 250), (250, 0, 250), (250, 0, 0))
 
-    def remove_deck(self, deck: list):
-        for card in deck:
-            self.standard_deck.remove(card)
+    # Запускаем окно
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
 
-    def who_attack(self):
-        return self.attacker.num
+        keys = pygame.key.get_pressed()
+        # pygame.draw.rect(screen, (0, 0, 0), (0, 0, size[0], height))
+        screen.fill((200, 200, 200))
 
-    def who_defend(self):
-        return self.defender.num
+        if keys[pygame.K_LEFT]:
+            but.position = (but.position[0] - 3, but.position[1])
+        if keys[pygame.K_RIGHT]:
+            but.position = (but.position[0] + 3, but.position[1])
 
+        but.draw(screen)
+        if window == 'menu':
+            running = menu(screen)
 
-print(Durak(Player([], 1), Player([], 2)))
+        if but.left_click():
+            pass
+
+        pygame.display.flip()
+        clock.tick(100)
+    pygame.quit()
