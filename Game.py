@@ -18,8 +18,8 @@ class Game:
         self.size = width, height = 2880, 1800
         flag = pygame.FULLSCREEN
         self.display = pygame.display.set_mode(self.size, flag)
-        info = pygame.display.get_window_size()
-        self.display = pygame.display.set_mode(info, flag)
+        self.size = self.display.get_size()
+        self.display = pygame.display.set_mode(self.size, flag)
         self.clock = pygame.time.Clock()
         pygame.display.set_caption('Durak')
         pygame.display.get_desktop_sizes()
