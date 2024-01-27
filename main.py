@@ -1,8 +1,13 @@
 from Durak import Durak
 from Player import Player
-import Game
+from Game import Game
+import pygame
 
 
 if __name__ == '__main__':
-    game = Durak(Player([], 1), Player([], 2))
-    Game.init()
+    durak = Durak(Player([], 1), Player([], 2))
+    game = Game()
+    running = True
+    while running:
+        running = game.update()
+    pygame.quit()
