@@ -15,10 +15,11 @@ class Game:
 
         self.durak = Durak(Player([], 1), Player([], 2))
 
-        self.size = width, height = 1650, 950
-        flag = pygame.RESIZABLE
-        self.display = pygame.display.set_mode(self.size)
-        print(pygame.display.Info())
+        self.size = width, height = 2880, 1800
+        flag = pygame.FULLSCREEN
+        self.display = pygame.display.set_mode(self.size, flag)
+        info = pygame.display.get_window_size()
+        self.display = pygame.display.set_mode(info, flag)
         self.clock = pygame.time.Clock()
         pygame.display.set_caption('Durak')
         pygame.display.get_desktop_sizes()
