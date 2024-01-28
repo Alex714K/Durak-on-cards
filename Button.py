@@ -3,7 +3,7 @@ import pygame
 
 class Button:
     def __init__(self, position: tuple, size: tuple, color: tuple, color_aim: tuple, color_down: tuple,
-                 text=None, color_text=None):
+                 text=None, color_text=(255, 255, 255)):
         # Если какой-либо цвет равен (256, 256, 256), то не будет отрисован
         self.color_down = color_down
         self.color_aim = color_aim
@@ -68,10 +68,7 @@ class Button:
     def insert_text(self, screen):
         pygame.font.init()
         font = pygame.font.Font(None, 50)
-        if self.color_text is not None:
-            text = font.render(self.text, True, self.color_text)
-        else:
-            text = font.render(self.text, True, (255, 255, 255))
+        text = font.render(self.text, True, self.color_text)
         x = self.position[0] + self.size[0] / 2 - text.get_width() / 2
         y = self.position[1] + self.size[1] / 2 - text.get_height() / 2
         screen.blit(text, (x, y))
