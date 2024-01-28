@@ -2,11 +2,13 @@ import pygame
 
 
 class Button:
-    def __init__(self, position: tuple, size: tuple, color: tuple, color_aim: tuple, color_down: tuple, text=None):
-        # Если какой-либо цвет равен (1, 1, 1), то не будет отрисован
+    def __init__(self, position: tuple, size: tuple, color: tuple, color_aim: tuple, color_down: tuple,
+                 text=None, color_text=None):
+        # Если какой-либо цвет равен (256, 256, 256), то не будет отрисован
         self.color_down = color_down
         self.color_aim = color_aim
         self.color = color
+        self.color_text = color_text
         self.click = False
         self.mouse_position = (0, 0)
         self.size = size
@@ -52,23 +54,24 @@ class Button:
             pygame.draw.rect(screen, self.color,
                              (self.position[0], self.position[1], self.size[0], self.size[1]))
         if self.check_aim():
-            if self.color_aim != (1, 1, 1):
+            if self.color_aim != (256, 256, 256):
                 pygame.draw.rect(screen, self.color_aim,
                                  (self.position[0], self.position[1], self.size[0], self.size[1]))
 
             if self.click:
-                if self.color_down != (1, 1, 1):
+                if self.color_down != (256, 256, 256):
                     pygame.draw.rect(screen, self.color_down,
                                      (self.position[0], self.position[1], self.size[0], self.size[1]))
         if self.text is not None:
             self.insert_text(screen)
 
     def insert_text(self, screen):
-        text = font.render(self.text, True, (0, 0, 0))
+        pygame.font.init()
+        font = pygame.font.Font(None, 50)
+        if self.color_text is not None:
+            text = font.render(self.text, True, self.color_text)
+        else:
+            text = font.render(self.text, True, (255, 255, 255))
         x = self.position[0] + self.size[0] / 2 - text.get_width() / 2
         y = self.position[1] + self.size[1] / 2 - text.get_height() / 2
         screen.blit(text, (x, y))
-
-
-pygame.font.init()
-font = pygame.font.Font(None, 50)
