@@ -17,9 +17,7 @@ class Durak:
         self.suits = ['diamonds', 'hearts', 'spades', 'clubs']
         self.trump = choice(self.suits)
         self.standard_deck = list()
-        for dign in self.dignitys:
-            for suit in self.suits:
-                self.standard_deck.append(Card(dign, suit))
+        self.make_deck()
         self.standard_deck.append(Card('Joker', 'Black'))
         self.standard_deck.append(Card('Joker', 'Red'))
 
@@ -73,3 +71,8 @@ class Durak:
 
     def who_defend(self):
         return self.defender.num
+
+    def make_deck(self):
+        for dign in self.dignitys:
+            for suit in self.suits:
+                self.standard_deck.append(Card(dign, suit))
