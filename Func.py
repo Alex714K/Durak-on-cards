@@ -12,9 +12,9 @@ def print_text(screen: pygame.surface.Surface, message: str, position: tuple, co
         screen.blit(text, position)
 
 
-def draw_card(screen: pygame.surface.Surface, position: tuple, size_rect: tuple, num: str, suit: str, size=30):
+def draw_card(screen: pygame.surface.Surface, position: tuple, size_rect: tuple, num: str, suit: str, size=35):
     # suit_txt = font.render(suit, True, (0, 0, 0))
-    font = pygame.font.Font(None, 30)
+    font = pygame.font.Font(None, 35)
     num_txt = font.render(num, True, (0, 0, 0))
     pygame.draw.rect(screen, (0, 250, 250), (position[0], position[1], size_rect[0], size_rect[1]))
     if suit in ('spades', 'clubs'):
