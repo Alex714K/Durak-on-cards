@@ -1,5 +1,3 @@
-from Durak import Durak
-from Player import Player
 from Game import Game
 import pygame
 
