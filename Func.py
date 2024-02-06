@@ -16,7 +16,7 @@ def draw_card(screen: pygame.surface.Surface, position: tuple, size_rect: tuple,
     # suit_txt = font.render(suit, True, (0, 0, 0))
     font = pygame.font.Font(None, 35)
     num_txt = font.render(num, True, (0, 0, 0))
-    pygame.draw.rect(screen, (0, 250, 250), (position[0], position[1], size_rect[0], size_rect[1]))
+    pygame.draw.rect(screen, (250, 250, 250), (position[0], position[1], size_rect[0], size_rect[1]))
     if suit in ('spades', 'clubs'):
         color = (0, 0, 0)
     else:
