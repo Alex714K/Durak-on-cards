@@ -32,6 +32,19 @@ class Game:
         self.window = 'menu'
         self.keys = pygame.key.get_pressed()
 
+        self.colors = {"exit": (87, 255, 106),
+                       "exit_aim": (60, 240, 80),
+                       "exit_down": (50, 220, 70),
+                       "play": (50, 255, 50),
+                       "play_aim": (35, 240, 35),
+                       "play_down": (20, 225, 20),
+                       "options": (0, 0, 0),
+                       "options_aim": (25, 25, 25),
+                       "options_down": (50, 50, 50),
+                       "card": (250, 250, 250),
+                       "reset": (0, 0, 0),
+                       "board": (84, 32, 13)}
+
     def update(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -66,14 +79,14 @@ class Game:
         self.display.fill((255, 255, 255))
         if len(self.buttons) < 1:
             # 0 play button
-            self.buttons.append(Button((1920/2 - 100, 1080/2 - 50 - 100), (200, 100), (0, 255, 0),
-                                       (0, 0, 255), (255, 0, 0), "Play"))
+            self.buttons.append(Button((1920/2 - 100, 1080/2 - 50 - 100), (200, 100), self.colors["play"],
+                                       self.colors["play_aim"], self.colors["play_down"], "Play"))
             # 1 options button
-            self.buttons.append(Button((1920/2 - 100, 1080/2 - 50 + 100), (200, 100), (0, 0, 0),
-                                       (1, 1, 1), (256, 256, 256), "Options"))
+            self.buttons.append(Button((1920/2 - 100, 1080/2 - 50 + 100), (200, 100), self.colors["options"],
+                                       self.colors["options_aim"], self.colors["options_down"], "Options"))
             # 2 exit button
-            self.buttons.append(Button((1920 - 200, 1080 - 100), (200, 100), (87, 255, 106),
-                                       (60, 240, 80), (50, 220, 70), "Exit"))
+            self.buttons.append(Button((1920 - 200, 1080 - 100), (200, 100), self.colors["exit"],
+                                       self.colors["exit_aim"], self.colors["exit_down"], "Exit"))
         self.buttons[0].draw(self.display)
 
         if self.buttons[0].left_down():
@@ -95,11 +108,11 @@ class Game:
         self.display.fill((255, 255, 255))
         if len(self.buttons) < 1:
             # 0 exit button
-            self.buttons.append(Button((1920 - 200, 1080 - 100), (200, 100), (87, 255, 106),
-                                       (87, 255, 106), (87, 255, 106), "Exit"))
+            self.buttons.append(Button((1920 - 200, 1080 - 100), (200, 100), self.colors["exit"],
+                                       self.colors["exit_aim"], self.colors["exit_down"], "Exit"))
             # 1 reset
-            self.buttons.append(Button((1920/2 - 100, 1080/2 - 50), (200, 100), (0, 0, 0),
-                                       (255, 0, 0), (230, 0, 0), "Reset?"))
+            self.buttons.append(Button((1920/2 - 100, 1080/2 - 50), (200, 100), self.colors["reset"],
+                                       (40, 40, 40), (75, 75, 75), "Reset?"))
 
         if self.buttons[0].draw_left_click(self.display):
             self.window = 'menu'
@@ -115,13 +128,13 @@ class Game:
         self.display.fill((235, 235, 235))
         if len(self.buttons) < 1:
             # 0 exit button
-            self.buttons.append(Button((1920 - 200, 1080 - 100), (200, 100), (87, 255, 106),
-                                       (87, 255, 106), (87, 255, 106), "Exit"))
+            self.buttons.append(Button((1920 - 200, 1080 - 100), (200, 100), self.colors["exit"],
+                                       self.colors["exit_aim"], self.colors["exit_down"], "Exit"))
         draw_card(self.display, (400, 400), (60*2, 90*2), 'A', 'diamonds')
 
         # столы игроков (ага, конечно, два коричневых прямоугольника, очень похожи на столы =) )
-        pygame.draw.rect(self.display, (84, 32, 13), (1920/2 - 300, 1080 - 200, 600, 200))
-        pygame.draw.rect(self.display, (84, 32, 13), (1920/2 - 300, 0, 600, 200))
+        pygame.draw.rect(self.display, self.colors["board"], (1920/2 - 300, 1080 - 200, 600, 200))
+        pygame.draw.rect(self.display, self.colors["board"], (1920/2 - 300, 0, 600, 200))
         # где какой игрок (строгое расположение)
         print_text(self.display, "1", (1920 / 2 - 300 - 25, 1080 - 30), (0, 0, 0))
         print_text(self.display, "2", (1920 / 2 - 300 - 25, 0), (0, 0, 0))
@@ -144,17 +157,18 @@ class Game:
         if len(self.buttons) < 1:
             # 0 vs player
             self.buttons.append(Button((1920/2 - 200 - 100, 1080/2 - 50), (200, 100), (256, 256 ,256),
-                                       (256, 256, 256), (256, 256, 256), "VS Player", (0, 0, 0)))
+                                       (250, 250, 250), (256, 256, 256), "VS Player", (0, 0, 0)))
             # 1 vs AI
             self.buttons.append(Button((1920/2 + 200 - 100, 1080/2 - 50), (200, 100), (256, 256, 256),
-                                       (256, 256, 256), (256, 256, 256), "VS AI", (0, 0, 0)))
-
+                                       (250, 250, 250), (256, 256, 256), "VS AI", (0, 0, 0)))
+        self.buttons[1].draw(self.display)
+        print_text(self.display, str(len(self.buttons)), (50, 50), (0, 0, 0))
         if self.buttons[0].draw_left_click(self.display):
-            self.ai = True
+            self.ai = False
             self.window = 'loading'
             self.buttons.clear()
-        if self.buttons[1].draw_left_click(self.display):
-            self.ai = False
+        if self.buttons[1].left_click():
+            self.ai = True
             self.window = 'loading'
             self.buttons.clear()
         pygame.display.flip()
