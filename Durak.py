@@ -18,8 +18,8 @@ class Durak:
         self.trump = choice(self.suits)
         self.standard_deck = list()
         self.make_deck()
-        self.standard_deck.append(Card('Joker', 'Black'))
-        self.standard_deck.append(Card('Joker', 'Red'))
+        self.standard_deck.append(Card('Joker', 'black'))
+        self.standard_deck.append(Card('Joker', 'red'))
 
         deck1 = sample(self.standard_deck, k=6)
         self.give_cards(deck1, self.player1)

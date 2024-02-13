@@ -1,3 +1,4 @@
+import pygame.font
 import pygame.surface
 
 
@@ -13,11 +14,11 @@ def print_text(screen: pygame.surface.Surface, message: str, position: tuple, co
 
 
 def draw_card(screen: pygame.surface.Surface, position: tuple, size_rect: tuple, num: str, suit: str, size=35):
-    # suit_txt = font.render(suit, True, (0, 0, 0))
     font = pygame.font.Font(None, 35)
+    # suit_txt = font.render(suit, True, (0, 0, 0))
     num_txt = font.render(num, True, (0, 0, 0))
     pygame.draw.rect(screen, (250, 250, 250), (position[0], position[1], size_rect[0], size_rect[1]))
-    if suit in ('spades', 'clubs'):
+    if suit in ('spades', 'clubs', 'black', 'red'):
         color = (0, 0, 0)
     else:
         color = (255, 0, 0)
