@@ -35,15 +35,16 @@ class Game:
         self.colors = {"exit": (87, 255, 106),
                        "exit_aim": (60, 240, 80),
                        "exit_down": (50, 220, 70),
-                       "play": (50, 255, 50),
-                       "play_aim": (35, 240, 35),
-                       "play_down": (20, 225, 20),
+                       "play": (87, 255, 106),
+                       "play_aim": (60, 240, 80),
+                       "play_down": (50, 220, 70),
                        "options": (0, 0, 0),
                        "options_aim": (25, 25, 25),
                        "options_down": (50, 50, 50),
                        "card": (250, 250, 250),
                        "reset": (0, 0, 0),
-                       "board": (84, 32, 13)}
+                       "board": (50, 200, 40),
+                       "gold": (240, 235, 0)}
 
     def update(self):
         for event in pygame.event.get():
@@ -58,16 +59,17 @@ class Game:
         #     print(pygame.mouse.get_pos())
         # but.draw(screen)
         #  Вызывает меню/основную игру/настройки
-        if self.window == 'game':
-            self.running = self.game()
-        elif self.window == 'menu':
-            self.running = self.menu()
-        elif self.window == 'options':
-            self.running = self.options()
-        elif self.window == 'who':
-            self.running = self.vs_who()
-        elif self.window == 'loading':
-            self.running = self.loading()
+        match self.window:
+            case 'game':
+                self.running = self.game()
+            case 'menu':
+                self.running = self.menu()
+            case 'options':
+                self.running = self.options()
+            case 'who':
+                self.running = self.vs_who()
+            case 'loading':
+                self.running = self.loading()
         self.clock.tick(100)
         # проверка на выключение игры
         if self.running:
@@ -130,7 +132,7 @@ class Game:
             # 0 exit button
             self.buttons.append(Button((1920 - 200, 1080 - 100), (200, 100), self.colors["exit"],
                                        self.colors["exit_aim"], self.colors["exit_down"], "Exit"))
-        draw_card(self.display, (400, 400), (60*2, 90*2), 'A', 'diamonds')
+        draw_card(self.display, (400, 400), (60*2, 90*2), 'Joker', 'black')
 
         # столы игроков (ага, конечно, два коричневых прямоугольника, очень похожи на столы =) )
         pygame.draw.rect(self.display, self.colors["board"], (1920/2 - 300, 1080 - 200, 600, 200))
@@ -138,9 +140,12 @@ class Game:
         # где какой игрок (строгое расположение)
         print_text(self.display, "1", (1920 / 2 - 300 - 25, 1080 - 30), (0, 0, 0))
         print_text(self.display, "2", (1920 / 2 - 300 - 25, 0), (0, 0, 0))
+        print_text()
 
         if self.buttons[0].draw_left_click(self.display):
-            return False
+            self.buttons.clear()
+            self.window = 'menu'
+            return True
         if self.check_end == 5:
             if self.durak.end_or_not():
                 return False
@@ -154,7 +159,7 @@ class Game:
 
     def vs_who(self):
         self.display.fill((255, 255, 255))
-        if len(self.buttons) < 1:
+        if len(self.buttons) < 2:
             # 0 vs player
             self.buttons.append(Button((1920/2 - 200 - 100, 1080/2 - 50), (200, 100), (256, 256 ,256),
                                        (250, 250, 250), (256, 256, 256), "VS Player", (0, 0, 0)))
@@ -167,10 +172,12 @@ class Game:
             self.ai = False
             self.window = 'loading'
             self.buttons.clear()
+            return True
         if self.buttons[1].left_click():
             self.ai = True
             self.window = 'loading'
             self.buttons.clear()
+            return True
         pygame.display.flip()
         return True
 
@@ -181,4 +188,3 @@ class Game:
         pygame.time.delay(500)
         self.window = 'game'
         return True
-
