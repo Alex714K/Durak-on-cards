@@ -18,7 +18,6 @@ def print_text(display: pygame.surface.Surface, message: str, position: tuple, c
 
 def draw_card(display: pygame.surface.Surface, position: tuple, dignity: str, suit: str, size=34):
     font = pygame.font.Font(None, 35)
-    # suit_txt = font.render(suit, True, (0, 0, 0))
     num_txt = font.render(dignity, True, (0, 0, 0))
     # x = 120 = width
     # y = 180 = height

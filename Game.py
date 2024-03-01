@@ -1,8 +1,5 @@
 import pygame
-# import numpy
-# from Durak import Durak
 from Player import Player
-# from Button import Button
 from Func import *
 
 
@@ -50,14 +47,6 @@ class Game:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return False
-        keys = pygame.key.get_pressed()
-        # if keys[pygame.K_LEFT]:
-        #     but.position = (but.position[0] - 3, but.position[1])
-        # if keys[pygame.K_RIGHT]:
-        #     but.position = (but.position[0] + 3, but.position[1])
-        # if pygame.mouse.get_pressed()[0]:
-        #     print(pygame.mouse.get_pos())
-        # but.draw(screen)
         #  Вызывает меню/основную игру/настройки
         match self.window:
             case 'game':
@@ -133,11 +122,7 @@ class Game:
             self.buttons.append(Button((1920 - 200, 1080 - 100), (200, 100), self.colors["exit"],
                                        self.colors["exit_aim"], self.colors["exit_down"], "Exit"))
         draw_card(self.display, (400, 400), 'Joker', 'black')
-
-        # столы игроков (ага, конечно, два зелёных прямоугольника, очень похожи на столы =) )
-        # pygame.draw.rect(self.display, self.colors["board"], (1920/2 - 300, 1080 - 200, 600, 200))
-        pygame.draw.rect(self.display, self.colors["board"], (1920/2 - 300, 0, 600, 200))
-        # где какой игрок (строгое расположение)
+        # где какой игрок
         match self.durak.who_attack():
             case 1:
                 print_text(self.display, "Attacker", (0, 1080 - 30), (0, 0, 0))
@@ -148,7 +133,6 @@ class Game:
                 print_text(self.display, "Defender", (0, 1080 - 30), (0, 0, 0))
                 print_text(self.display, "Attacker", (0, 0), (0, 0, 0))
                 show_cards(self.display, self.attacker.cards, 2, self.durak)
-                # self.attacker, self.defender = self.defender, self.attacker
 
         if self.buttons[0].draw_left_click(self.display):
             self.buttons.clear()

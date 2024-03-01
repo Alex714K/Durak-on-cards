@@ -6,8 +6,6 @@ from Card import Card
 class Durak:
     def __init__(self, player1: Player, player2, ai_flag=False):
         self.board = list()
-        # self.player1 = player1
-        # self.player2 = player2
         [self.attacker, self.defender] = sample([player1, player2], k=2)
         self.ai_flag = ai_flag
         self.winner = None
