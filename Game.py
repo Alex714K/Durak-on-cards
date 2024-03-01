@@ -1,8 +1,8 @@
 import pygame
 # import numpy
-from Durak import Durak
+# from Durak import Durak
 from Player import Player
-from Button import Button
+# from Button import Button
 from Func import *
 
 
@@ -10,9 +10,9 @@ class Game:
     def __init__(self):
         pygame.init()
 
-        first_player = Player([], 1)
-        second_player = Player([], 2)
-        self.durak = Durak(first_player, second_player)
+        self.attacker = Player([], 1)
+        self.defender = Player([], 2)
+        self.durak = Durak(self.attacker, self.defender)
 
         self.size = 1920, 1080
         flag = pygame.SCALED  # черные полосы при другом разрешении
@@ -132,15 +132,23 @@ class Game:
             # 0 exit button
             self.buttons.append(Button((1920 - 200, 1080 - 100), (200, 100), self.colors["exit"],
                                        self.colors["exit_aim"], self.colors["exit_down"], "Exit"))
-        draw_card(self.display, (400, 400), (60*2, 90*2), 'Joker', 'black')
+        draw_card(self.display, (400, 400), 'Joker', 'black')
 
-        # столы игроков (ага, конечно, два коричневых прямоугольника, очень похожи на столы =) )
-        pygame.draw.rect(self.display, self.colors["board"], (1920/2 - 300, 1080 - 200, 600, 200))
+        # столы игроков (ага, конечно, два зелёных прямоугольника, очень похожи на столы =) )
+        # pygame.draw.rect(self.display, self.colors["board"], (1920/2 - 300, 1080 - 200, 600, 200))
         pygame.draw.rect(self.display, self.colors["board"], (1920/2 - 300, 0, 600, 200))
         # где какой игрок (строгое расположение)
-        print_text(self.display, "1", (1920 / 2 - 300 - 25, 1080 - 30), (0, 0, 0))
-        print_text(self.display, "2", (1920 / 2 - 300 - 25, 0), (0, 0, 0))
-        print_text()
+        match self.durak.who_attack():
+            case 1:
+                print_text(self.display, "Attacker", (0, 1080 - 30), (0, 0, 0))
+                print_text(self.display, "Defender", (0, 0), (0, 0, 0))
+                show_cards(self.display, self.attacker.cards, 1, self.durak)
+
+            case 2:
+                print_text(self.display, "Defender", (0, 1080 - 30), (0, 0, 0))
+                print_text(self.display, "Attacker", (0, 0), (0, 0, 0))
+                show_cards(self.display, self.attacker.cards, 2, self.durak)
+                # self.attacker, self.defender = self.defender, self.attacker
 
         if self.buttons[0].draw_left_click(self.display):
             self.buttons.clear()
