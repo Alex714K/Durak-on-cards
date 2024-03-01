@@ -121,7 +121,6 @@ class Game:
             # 0 exit button
             self.buttons.append(Button((1920 - 200, 1080 - 100), (200, 100), self.colors["exit"],
                                        self.colors["exit_aim"], self.colors["exit_down"], "Exit"))
-        draw_card(self.display, (400, 400), 'Joker', 'black')
         # где какой игрок
         match self.durak.who_attack():
             case 1:
@@ -159,7 +158,6 @@ class Game:
             self.buttons.append(Button((1920/2 + 200 - 100, 1080/2 - 50), (200, 100), (256, 256, 256),
                                        (250, 250, 250), (256, 256, 256), "VS AI", (0, 0, 0)))
         self.buttons[1].draw(self.display)
-        print_text(self.display, str(len(self.buttons)), (50, 50), (0, 0, 0))
         if self.buttons[0].draw_left_click(self.display):
             self.ai = False
             self.window = 'loading'
